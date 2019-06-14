@@ -9,6 +9,13 @@ from random import randint
 from collections import Iterable
 from functools import reduce
 
+def list_get(ls,idx,default):
+    try:
+        return ls[idx]
+    except IndexError:
+        return default
+    
+
 def concat(*iterables):
     for it in iterables:
         if isinstance(it,Iterable):
@@ -34,6 +41,7 @@ def unique_values(iterable):
 def random_iterable(n,a,b):
     return (randint(a,b) for i in range(n))
 
+
 def iterate(initial, predicate, operator):
     e = initial
     while predicate(e):
@@ -50,7 +58,7 @@ def count(iterable):
         n = n+1
     return n
 
-def grouping(iterable,f,fmap=None,fred=None,intial=None):
+def grouping(iterable,f,fmap=None,fred=None,initial=None):
     r = {}
     for x in iterable:
         k = f(x)
@@ -63,7 +71,7 @@ def grouping(iterable,f,fmap=None,fred=None,intial=None):
     else:
         s = r
     if(fred):
-        q = {k:reduce(fred,v,intial) for k,v in s.items()}
+        q = {k:reduce(fred,v,initial=initial) for k,v in s.items()}
     else:
         q = s
     return q 

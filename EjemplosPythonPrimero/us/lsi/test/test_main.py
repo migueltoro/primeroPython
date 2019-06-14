@@ -10,9 +10,10 @@ from us.lsi.ruta.Ruta import Ruta
 from us.lsi.tools import FileTools
 from us.lsi.tools import StringTools
 from us.lsi.palabras import Palabras
-from us.lsi.tools import Collectors
 from us.lsi.sevici.Estacion import Estacion
 from us.lsi.sevici.Red import Red
+from us.lsi.sevici.Redes import Redes
+from us.lsi.tools.FIterable import FIterable
 
 def test1():
     
@@ -50,7 +51,7 @@ def test5():
     
 def test6():
     r = Palabras.gruposDeLineas('../../../resources/quijote.txt')
-    print(Collectors.toStringIterable(Collectors.limit(sorted(r.items()),100)))
+    print(FIterable(r.items()).limit(100).sort())
     
 def test7():
     e = Estacion.parse('149_CALLE ARROYO,20,11,9,37.397829929383,-5.97567172039552'.split(','))
@@ -62,7 +63,16 @@ def test8():
     
 def test9():
     r = Red.of('/v2/networks/sevici')
-    print([r['network']['stations']])
+    ubicacion = r.estaciones[0].ubicacion
+    print(FIterable(r.cercanas(ubicacion,0.9)))
+    
+def test10():
+    r = Redes.ofUrl()
+    StringTools.to_unicode(r)
+    
+def test11():
+    r = Redes.ofUrl()
+    print(FIterable(r.allByCountry('ES')).distinct().map(lambda x: x.href).sort())
 
 if __name__ == '__main__':    
-    test9()
+    test6()

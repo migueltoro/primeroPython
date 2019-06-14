@@ -12,5 +12,11 @@ def transform(inText,reglas):
         outText = re.sub(r'\{'+e+'\}',s,outText)
     return outText;
 
+def to_unicode(r):
+    return str(r).encode('cp850', errors='replace').decode('cp850')
+    
+def new_encode(s):
+    return str(s).encode('cp850', errors='replace').decode('cp850')
+
 if __name__ == '__main__':
     pass
