@@ -52,7 +52,7 @@ def test5():
     
 def test6():
     r = Palabras.gruposDeLineas('../../../resources/quijote.txt')
-    print(FIterable(r.items()).limit(100).sort())
+    print(FIterable(r.items()).sort().limit(100))
     
 def test7():
     e = Estacion.parse('149_CALLE ARROYO,20,11,9,37.397829929383,-5.97567172039552'.split(','))
@@ -74,10 +74,15 @@ def test10():
 def test11():
     r = Redes.ofUrl()
     print(FIterable(r.allByCountry('ES')).distinct().map(lambda x: x.href).sort())
-    
+       
 def test12():
     r = FIterable.range(1, 100, 2).reduce(operator.add,operator.mul)
     print(r)
+    
+def test13():
+    r = FIterable.range(1, 100, 2).estadisticos()
+    print(r.sum)
+    print(r.desviacion_tipica())
 
 if __name__ == '__main__':    
-    test12()
+    test13()

@@ -7,6 +7,8 @@ Created on Jun 13, 2019
 from us.lsi.tools import Collectors
 from us.lsi.tools import FileTools
 from functools import reduce
+import math
+
 
 class FIterable:
     '''
@@ -99,6 +101,50 @@ class FIterable:
     
     def toSet(self):
         return {x for x in self.iterable}
+    
+    def estadisticos(self):
+        num = 0
+        sm = 0
+        sum_cuadrados = 0
+        mx = None
+        mn = None
+        for x in self.iterable:
+            num = num+1
+            sm = sm+x
+            sum_cuadrados = sum_cuadrados+x*x
+            mx = max(mx,x) if(mx) else x
+            mn = min(mn,x) if(mn) else x
+        return Estadisticos(num,sm,sum_cuadrados,mx,mn)   
         
     def __str__(self):  
         return Collectors.toStringIterable(self.iterable)
+    
+
+class Estadisticos:   
+    '''
+    classdocs
+    '''
+    
+    def __init__(self,num,sm,sum_cuadrados,mx,mn):
+        '''
+        Constructor
+        '''
+        self.num = num
+        self.sum = sm
+        self.sum_cuadrados = sum_cuadrados
+        self.max = mx
+        self.min = mn
+        
+    def media(self):
+        return self.sum/self.num
+    
+    def varianza(self):        
+        return self.sum_cuadrados/self.num - (self.media())**2
+    
+    def desviacion_tipica(self):
+        return math.sqrt(self.varianza())
+    
+    
+    def __str__(self): 
+        return '{0},{1}'.format(self.num,self.sum)
+    
