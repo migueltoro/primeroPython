@@ -11,7 +11,7 @@ from us.lsi.tools import Collectors
 
 def palabras(file):
     lineas = FileTools.lineas(file,encoding='utf-16')
-    palabras = (p for linea in lineas for p in re.split(r'[ ,;.\n():\"]' ,linea) if len(p) >0) 
+    palabras = (p for linea in lineas for p in re.split(r'[? ,;.\n():\"]' ,linea) if len(p) >0) 
     return palabras
 
 def palabrasDistintas(file):

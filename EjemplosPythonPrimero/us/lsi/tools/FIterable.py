@@ -6,6 +6,7 @@ Created on Jun 13, 2019
 
 from us.lsi.tools import Collectors
 from us.lsi.tools import FileTools
+from functools import reduce
 
 class FIterable:
     '''
@@ -32,7 +33,7 @@ class FIterable:
              
     @staticmethod 
     def range(start, stop, step=1):
-        return FIterable(range(start, stop, step=step))
+        return FIterable(range(start, stop, step))
     
     @staticmethod
     def concat(*iterables):
@@ -85,7 +86,10 @@ class FIterable:
         return sum(self.iterable)
     
     def average(self):
-        return sum(self.iterable)/self.count()
+        return sum(self.iterable)/float(self.count())
+    
+    def reduce(self,op):
+        return reduce(op,self.iterable)    
     
     def groupingSet(self,f):
         return Collectors.groupingSet(self.iterable, f)

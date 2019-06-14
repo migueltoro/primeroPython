@@ -14,6 +14,7 @@ from us.lsi.sevici.Estacion import Estacion
 from us.lsi.sevici.Red import Red
 from us.lsi.sevici.Redes import Redes
 from us.lsi.tools.FIterable import FIterable
+import operator
 
 def test1():
     
@@ -73,6 +74,10 @@ def test10():
 def test11():
     r = Redes.ofUrl()
     print(FIterable(r.allByCountry('ES')).distinct().map(lambda x: x.href).sort())
+    
+def test12():
+    r = FIterable.range(1, 100, 2).reduce(operator.add,operator.mul)
+    print(r)
 
 if __name__ == '__main__':    
-    test6()
+    test12()
