@@ -5,6 +5,7 @@ Created on Jun 13, 2019
 '''
 
 from us.lsi.tools import Collectors
+from us.lsi.tools import FileTools
 
 class FIterable:
     '''
@@ -17,6 +18,14 @@ class FIterable:
         '''
         self.iterable = iterable
     
+    @staticmethod
+    def lineas(file,encoding='utf-8'):
+        return FIterable(FileTools.lineas(file,encoding=encoding))
+    
+    @staticmethod
+    def lineasCSV(file,delimiter = ","):
+        return FIterable(FileTools.lineasCSV(file,delimiter=delimiter))
+       
     @staticmethod
     def iterate(initial, predicate, operator):
         return FIterable(Collectors.iterate(initial, predicate, operator))
