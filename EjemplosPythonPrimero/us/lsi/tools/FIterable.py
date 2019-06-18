@@ -66,6 +66,12 @@ class FIterable:
     def grouping(self,f,fmap=None,fred=None,initial=None):
         return Collectors.grouping(self.iterable, f, fmap=fmap, fred=fred, initial=initial)
     
+    def partitioning(self,predicate):
+        return Collectors.grouping(self.iterable, predicate)
+    
+    def joining(self,separator='\n',prefix='',suffix=''):
+        return '{0}{1}{2}'.format(prefix,separator.join(str(x) for x in  self.iterable),suffix)
+    
     def any(self,predicate):
         return any(predicate(x) for x in self.iterable)
     
@@ -90,6 +96,12 @@ class FIterable:
     def average(self):
         return sum(self.iterable)/float(self.count())
     
+    def index(self,predicate,default=None):
+        for i,el in enumerate(self.iterable):
+            if predicate(el):
+                return i
+        return default
+        
     def reduce(self,op):
         return reduce(op,self.iterable)    
     

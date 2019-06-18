@@ -15,6 +15,8 @@ from us.lsi.sevici.Red import Red
 from us.lsi.sevici.Redes import Redes
 from us.lsi.tools.FIterable import FIterable
 import operator
+from us.lsi.montecarlo.Card import Card
+from us.lsi.montecarlo.Mano import Mano
 
 def test1():
     
@@ -83,6 +85,21 @@ def test13():
     r = FIterable.range(1, 100, 2).estadisticos()
     print(r.sum)
     print(r.desviacion_tipica())
+    
+def test14():
+    c = Card.ofText('10D')
+    print(c)
+    
+def test15():
+    m1 = Mano.random()
+    m2 = Mano.ofText('[10D,10H,10C,10S,5H]')
+#    print(m.fuerza())
+    print(m1< m2)
+    print(m1)
+    print(m2)
+    print(m1.getFuerza())
+    print(m2.getFuerza())
+    m1.toGraphics('../../../ficheros/CartasOut.html')
 
 if __name__ == '__main__':    
-    test13()
+    test15()

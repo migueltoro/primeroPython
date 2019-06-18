@@ -5,6 +5,7 @@ Created on Jun 5, 2019
 '''
 from us.lsi.tools import FileTools
 from us.lsi.tools import StringTools
+from us.lsi.tools.FIterable import FIterable
 
 def lineChart(fileOut,title,campos,datos):  
     result = FileTools.text('../../../resources/LineChartPattern.html');
@@ -28,6 +29,16 @@ def columnsBarChart(fileOut,title,nombresDatos,nombresColumna,datos):
  
 def columnaColumnsBarChart(e,nombresColumna,datos):
     pass
+
+def cartasGraphic(fileOut, cartas,fuerza,tipo):       
+    result = FileTools.text("../../../resources/CartasPattern.html")
+    cartasText = FIterable(cartas) \
+            .map(lambda c: "<img src=\"../{0}\" width=\"120px\" height=\"180px\">".format(c.getNameFile())) \
+            .joining(separator="\n",prefix = "\n",suffix ="\n")
+    reglas = {"cartas":cartasText,"fuerza":str(fuerza), "tipo": tipo}
+    result = StringTools.transform(result,reglas);
+    FileTools.write(fileOut,result)
+         
 
 if __name__ == '__main__':
     pass

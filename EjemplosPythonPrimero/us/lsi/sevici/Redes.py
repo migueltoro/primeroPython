@@ -7,8 +7,7 @@ Created on Jun 10, 2019
 import requests
 import json
 from us.lsi.sevici.Red import Red
-from us.lsi.tools.Collectors import counting
-from us.lsi.tools.Collectors import unique_values
+from us.lsi.tools.FIterable import FIterable
 
 url = "http://api.citybik.es/v2/networks"
 
@@ -37,7 +36,7 @@ class Redes:
         return any(r.country == country and r.city == city for r in self.redes)    
     
     def citiesWhithSeveralNetworks(self):
-        groups = counting(self.redes,lambda r: r.city)
+        groups = FIterable(self.redes).counting(lambda r: r.city)
         return [r.city for r in self.redes if groups[r.city]>1]
     
     def allByCountry(self,country):
