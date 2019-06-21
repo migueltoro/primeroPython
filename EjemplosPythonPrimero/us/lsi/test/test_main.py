@@ -1,7 +1,7 @@
 '''
 Created on Jun 4, 2019
 
-@author: Miuel Toro
+@author: Miguel Toro
 '''
 from us.lsi.data.coordenadas2D import Coordenadas2D
 from us.lsi.data.coordenadas3D import Coordenadas3D
@@ -17,6 +17,10 @@ from us.lsi.tools.FIterable import FIterable
 import operator
 from us.lsi.montecarlo.Card import Card
 from us.lsi.montecarlo.Mano import Mano
+from us.lsi.tools.GraphicsMap import GraphicType
+from us.lsi.whatsapp.Mensaje import Mensaje
+from us.lsi.whatsapp.Grupo import Grupo
+from us.lsi.whatsapp.Grupo import PalabraUsuario
 
 def test1():
     
@@ -100,6 +104,27 @@ def test15():
     print(m1.getFuerza())
     print(m2.getFuerza())
     m1.toGraphics('../../../ficheros/CartasOut.html')
+    
+def test16():
+    r = Ruta.ofFile('../../../resources/ruta.csv')
+    r.mostrarMapa('../../../ficheros/GoogleMapaOut.html',GraphicType.Google)
+
+def test17():
+    m = Mensaje.parse('26/2/16 9:16 - Leonard: De acuerdo, ¿cuál es tu punto?')
+    print(m)
+    g = Grupo.ofFile('../../../resources/bigbangtheory_es.txt')
+    print(StringTools.to_unicode(g))
+    
+def test18():
+    g = Grupo.ofFile('../../../resources/bigbangtheory_es.txt')
+#    print(len(g.getMensajes()))
+#    g.drawNumeroDeMensajesPorDiaDeSemana('../../../ficheros/DiaSemanaOut.html')
+##    ms = g.getImportanciaDePalabrasDeUsuario('Leonard', 'gato')
+    ms = g.getPalabrasCaracteristicasDeUsuario('Leonard',3)
+#    print(ms)
+    print(FIterable(ms.items()).sort(lambda x: x[1],reverse=True))
+#    print(FIterable(g.getMensajesPorUsuario()))
+#   print(ms)
 
 if __name__ == '__main__':    
-    test15()
+    test18()

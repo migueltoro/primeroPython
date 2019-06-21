@@ -5,6 +5,7 @@ Created on Jun 4, 2019
 '''
 
 from math import sin, cos, sqrt, atan2, radians
+from us.lsi.tools.FIterable import FIterable
 
 class Coordenadas2D:
     '''
@@ -17,6 +18,10 @@ class Coordenadas2D:
         self.latitude=latitude
         self.longitude=longitude
       
+    @staticmethod
+    def of(latitude,longitude):
+        return Coordenadas2D(latitude,longitude)
+        
     
     def distance(self, other):  
         radio_tierra = 6373.0
@@ -30,7 +35,14 @@ class Coordenadas2D:
         return radio_tierra * c
     
     def esCercana(self, c, d):
-        return self.distance(c) <=d;
+        return self.distance(c) <=d
+    
+    @staticmethod
+    def center(coordenadas): 
+        averageLat = FIterable(coordenadas).map(lambda x: x.latitude).average()
+        averageLng = FIterable(coordenadas).map(lambda x: x.longitude).average()
+        return Coordenadas2D.of(averageLat,averageLng)
+    
     
     def __str__(self):
         return '({0},{1})'.format(self.latitude,self.longitude)

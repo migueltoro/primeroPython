@@ -24,6 +24,7 @@ def lineasCSV(file, delimiter = ","):
         lineas =  [linea for linea in lector]
         f.close()
         return lineas
+
     
 def write(file,text):
     with open(file, "w", encoding='utf-8') as f:

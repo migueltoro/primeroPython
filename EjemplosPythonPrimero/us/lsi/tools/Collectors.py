@@ -66,12 +66,14 @@ def grouping(iterable,f,fmap=None,fred=None,initial=None):
             r[k].append(x)
         else:
             r[k] = [x]
-    if(fmap):
+    if fmap:
         s = {k:[fmap(x) for x in v] for k,v in r.items()}
     else:
         s = r
-    if(fred):
-        q = {k:reduce(fred,v,initial=initial) for k,v in s.items()}
+    if fred and initial:
+        q = {k:reduce(fred,v,initial) for k,v in s.items()}
+    elif fred:
+        q = {k:reduce(fred,v) for k,v in s.items()}
     else:
         q = s
     return q 

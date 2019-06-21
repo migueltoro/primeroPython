@@ -7,6 +7,8 @@ Created on Jun 4, 2019
 import csv
 from us.lsi.ruta.Marca import Marca
 from us.lsi.tools import Graphics
+from us.lsi.tools.GraphicsMap import GraphicsMap
+from us.lsi.tools.FIterable import FIterable
 
 class Ruta:
     '''
@@ -50,6 +52,12 @@ class Ruta:
         indices = [i for i in range(len(self.marcas))]
         campos = ["Posicion","Altura"]
         Graphics.lineChart(fileOut,"Ruta Ronda",campos,[indices,alturas])
+        
+    def mostrarMapa(self,fileOut,tipo):
+        coordenadas = FIterable(self.marcas) \
+                .map(lambda x: x.coordenadas.to2D()) \
+                .toList()
+        GraphicsMap.of(tipo).polyline(fileOut,coordenadas)
            
     def __str__(self):
         return '\n'.join(str(x) for x in self.marcas)

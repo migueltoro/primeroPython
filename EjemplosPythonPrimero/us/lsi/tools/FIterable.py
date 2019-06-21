@@ -20,14 +20,22 @@ class FIterable:
         Constructor
         '''
         self.iterable = iterable
+        
+    def __iter__(self):
+        return iter(self.iterable)
     
     @staticmethod
-    def lineas(file,encoding='utf-8'):
+    def lineas(file,encoding='utf-8'):       
         return FIterable(FileTools.lineas(file,encoding=encoding))
     
     @staticmethod
+    def seqLineas(file,encoding='utf-8'):
+        with open(file, "r", encoding=encoding) as f:
+            return FIterable(f)
+    
+    @staticmethod
     def lineasCSV(file,delimiter = ","):
-        return FIterable(FileTools.lineasCSV(file,delimiter=delimiter))
+        return FIterable(FileTools.lineasCSV(file,delimiter=delimiter))  
        
     @staticmethod
     def iterate(initial, predicate, operator):
@@ -46,10 +54,10 @@ class FIterable:
         return FIterable(Collectors.random_iterable(n, a, b))
           
     def filter(self,predicate):
-        return FIterable((x for x in self.iterable if(predicate(x))))
+        return FIterable(x for x in self.iterable if(predicate(x)))
     
     def map(self,f):
-        return FIterable((f(x) for x in self.iterable))
+        return FIterable(f(x) for x in self.iterable)
     
     def distinct(self):
         return FIterable(Collectors.unique_values(self.iterable))
@@ -57,8 +65,8 @@ class FIterable:
     def limit(self,n):
         return FIterable(Collectors.limit(self.iterable,n))
     
-    def flat(self):
-        return FIterable(Collectors.flat(self.iterable))
+    def flatMap(self,f):
+        return FIterable(y for x in self.iterable for y in f(x))
     
     def sort(self, key = None, reverse = False):
         return FIterable(sorted(self.iterable,key=key,reverse= reverse))
@@ -81,7 +89,7 @@ class FIterable:
     def counting(self,f):
         return Collectors.counting(self.iterable,f)
     
-    def count(self):
+    def size(self):
         return Collectors.count(self.iterable)
     
     def min(self,f):
@@ -94,7 +102,12 @@ class FIterable:
         return sum(self.iterable)
     
     def average(self):
-        return sum(self.iterable)/float(self.count())
+        s = 0
+        n = 0
+        for x in self.iterable:
+            s = s + x 
+            n = n+1
+        return s/n
     
     def index(self,predicate,default=None):
         for i,el in enumerate(self.iterable):
@@ -113,6 +126,7 @@ class FIterable:
     
     def toSet(self):
         return {x for x in self.iterable}
+    
     
     def estadisticos(self):
         num = 0
