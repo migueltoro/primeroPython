@@ -20,7 +20,6 @@ from us.lsi.montecarlo.Mano import Mano
 from us.lsi.tools.GraphicsMap import GraphicType
 from us.lsi.whatsapp.Mensaje import Mensaje
 from us.lsi.whatsapp.Grupo import Grupo
-from us.lsi.whatsapp.Grupo import PalabraUsuario
 
 def test1():
     

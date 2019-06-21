@@ -11,7 +11,7 @@ from us.lsi.tools import FileTools
 from us.lsi.tools import Graphics
 import collections
 import re
-from us.lsi.tools.DictionaryExtension import mapValues
+from us.lsi.tools.Extensions import mapValues
 
 
 PalabraUsuario = collections.namedtuple('PalabraUsuario', 'palabra usuario')

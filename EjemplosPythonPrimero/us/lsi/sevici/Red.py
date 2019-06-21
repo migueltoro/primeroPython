@@ -9,7 +9,7 @@ from us.lsi.sevici.Estacion import Estacion
 from us.lsi.tools import FileTools
 import requests
 import json
-from us.lsi.tools.Collectors import list_get 
+from us.lsi.tools.Extensions import list_get 
 
 url = 'http://api.citybik.es'
 file = '../../../resources/estaciones.csv'

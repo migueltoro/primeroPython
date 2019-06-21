@@ -3,12 +3,35 @@ Created on Jun 13, 2019
 
 @author: Miguel Toro
 '''
-
-from us.lsi.tools import Collectors
+from collections import Iterable
 from us.lsi.tools import FileTools
 from functools import reduce
 import math
+from random import randint
 
+
+def concat(*iterables):
+    for it in iterables:
+        if isinstance(it,Iterable):
+            for e in it:
+                yield e 
+        else:
+            yield it
+
+
+def unique_values(iterable):
+    seen = set()
+    for item in iterable:
+        if item not in seen:
+            seen.add(item)
+            yield item 
+
+def iterate(initial, predicate, operator):
+    e = initial
+    while predicate(e):
+        yield e
+        e = operator(e)
+        
 
 class FIterable:
     '''
@@ -39,7 +62,7 @@ class FIterable:
        
     @staticmethod
     def iterate(initial, predicate, operator):
-        return FIterable(Collectors.iterate(initial, predicate, operator))
+        return FIterable(iterate(initial, predicate, operator))
              
     @staticmethod 
     def range(start, stop, step=1):
@@ -47,11 +70,11 @@ class FIterable:
     
     @staticmethod
     def concat(*iterables):
-        return FIterable(Collectors.concat(iterables))
+        return FIterable(concat(iterables))
     
     @staticmethod
     def random(n,a,b):
-        return FIterable(Collectors.random_iterable(n, a, b))
+        return FIterable(randint(a,b) for _ in range(n))
           
     def filter(self,predicate):
         return FIterable(x for x in self.iterable if(predicate(x)))
@@ -60,10 +83,11 @@ class FIterable:
         return FIterable(f(x) for x in self.iterable)
     
     def distinct(self):
-        return FIterable(Collectors.unique_values(self.iterable))
+        return FIterable(unique_values(self.iterable))
     
     def limit(self,n):
-        return FIterable(Collectors.limit(self.iterable,n))
+        s = zip(self.iterable,range(n))
+        return FIterable(x for x,_ in s)
     
     def flatMap(self,f):
         return FIterable(y for x in self.iterable for y in f(x))
@@ -72,10 +96,27 @@ class FIterable:
         return FIterable(sorted(self.iterable,key=key,reverse= reverse))
     
     def grouping(self,f,fmap=None,fred=None,initial=None):
-        return Collectors.grouping(self.iterable, f, fmap=fmap, fred=fred, initial=initial)
+        r = {}
+        for x in self.iterable:
+            k = f(x)
+            if(k in r.keys()):
+                r[k].append(x)
+            else:
+                r[k] = [x]
+        if fmap:
+            s = {k:[fmap(x) for x in v] for k,v in r.items()}
+        else:
+            s = r
+        if fred and initial:
+            q = {k:reduce(fred,v,initial) for k,v in s.items()}
+        elif fred:
+            q = {k:reduce(fred,v) for k,v in s.items()}
+        else:
+            q = s
+        return q 
     
     def partitioning(self,predicate):
-        return Collectors.grouping(self.iterable, predicate)
+        return self.grouping(predicate)
     
     def joining(self,separator='\n',prefix='',suffix=''):
         return '{0}{1}{2}'.format(prefix,separator.join(str(x) for x in  self.iterable),suffix)
@@ -87,10 +128,20 @@ class FIterable:
         return all(predicate(x) for x in self.iterable)
     
     def counting(self,f):
-        return Collectors.counting(self.iterable,f)
+        r = {}
+        for x in self.iterable:
+            k = f(x)
+            if(k in r.keys()):
+                r[k] = r[k]+1
+            else:
+                r[k] = 1
+        return r
     
     def size(self):
-        return Collectors.count(self.iterable)
+        n = 0
+        for _ in self.iterable:
+            n = n+1
+        return n
     
     def min(self,f):
         return min(self.iterable)
@@ -115,11 +166,24 @@ class FIterable:
                 return i
         return default
         
-    def reduce(self,op):
-        return reduce(op,self.iterable)    
+    def reduce(self,op,initial=None):
+        if not initial:
+            value = next(self.iterable)
+        else:
+            value = initial
+        for e in self.iterable:
+            value = op(value, e)
+        return value 
     
     def groupingSet(self,f):
-        return Collectors.groupingSet(self.iterable, f)
+        r = {}
+        for x in self.iterable:
+            k = f(x)
+            if(k in r.keys()):
+                r[k].add(x)
+            else:
+                r[k] = {x}
+        return r  
     
     def toList(self):
         return [x for x in self.iterable]
@@ -143,7 +207,7 @@ class FIterable:
         return Estadisticos(num,sm,sum_cuadrados,mx,mn)   
         
     def __str__(self):  
-        return Collectors.toStringIterable(self.iterable)
+        return '\n'.join(str(x) for x in self.iterable)
     
 
 class Estadisticos:   
